@@ -1,0 +1,2 @@
+Will all the state variables be initialized in input file? Yes
+How are we supposed to preserve operation information like x = x + 50 if we are just gonna store sequence of {R,x}s and {W,x}s in the transaction class object? A possible solution is to store the whole thing as raw strings and keep it for being processed later in the execute transaction function.
