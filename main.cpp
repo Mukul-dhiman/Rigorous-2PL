@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
-#include "transaction.h"
+#include "headers/transaction.h"
+#include "headers/lockmanager.h"
 using namespace std;
 
 map<string, int> state_variables;
@@ -65,7 +66,7 @@ int main(int argc, char* argv[])
     for(int i=0;i<N;i++)
     {
         cout << endl;
-        
+
         int transaction_id;
         vector<string> operation_list;
         outcome oc;
