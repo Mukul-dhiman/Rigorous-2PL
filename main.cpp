@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <pthread.h>
 #include "headers/transaction.h"
 #include "headers/lockmanager.h"
 using namespace std;
@@ -19,18 +20,32 @@ void set_value(string variable_name, int value)
 
 vector<string> split_string(string s)
 {
-    string x="";
+    string x = "";
     vector<string> v;
-    for(int i=0;i<s.size();i++)
+    for (int i = 0; i < s.size(); i++)
     {
-        if(s[i]!=' ') x += s[i];
-        else {v.push_back(x); x="";}
+        if (s[i] != ' ')
+            x += s[i];
+        else
+        {
+            v.push_back(x);
+            x = "";
+        }
     }
-    if(x!="") v.push_back(x);
+    if (x != "")
+        v.push_back(x);
     return v;
 }
 
-int main(int argc, char* argv[])
+// TODO
+void *execute_transaction(void *arg)
+{
+    // int i = (long long int)arg;
+    // cout << i << endl;
+    return NULL;
+}
+
+int main(int argc, char *argv[])
 {
     // Argument validation
     if (argc != 3)
@@ -48,22 +63,25 @@ int main(int argc, char* argv[])
     getline(cin, read_line);
     int N = stoi(read_line);
 
-    cout<<N<<endl;
+    cout << N << endl;
 
     // State variables
-    getline(cin,read_line);
+    getline(cin, read_line);
     vector<string> state_variable_list = split_string(read_line);
 
-    for(int i=0;i<state_variable_list.size();i+=2)
+    for (int i = 0; i < state_variable_list.size(); i += 2)
     {
-        state_variables[state_variable_list[i]] = stoi(state_variable_list[i+1]);
+        state_variables[state_variable_list[i]] = stoi(state_variable_list[i + 1]);
     }
 
-    for(auto it: state_variables){cout<<it.first<<": "<<it.second<<endl;}
+    for (auto it : state_variables)
+    {
+        cout << it.first << ": " << it.second << endl;
+    }
 
     // Transactions
     vector<transaction> transaction_array;
-    for(int i=0;i<N;i++)
+    for (int i = 0; i < N; i++)
     {
         cout << endl;
 
@@ -71,21 +89,35 @@ int main(int argc, char* argv[])
         vector<string> operation_list;
         outcome oc;
 
-        getline(cin,read_line);
+        getline(cin, read_line);
         transaction_id = stoi(read_line);
 
-        getline(cin,read_line);
-        while(read_line!="C" && read_line!="A")
+        getline(cin, read_line);
+        while (read_line != "C" && read_line != "A")
         {
-            cout<<read_line<<endl;
+            cout << read_line << endl;
             operation_list.push_back(read_line);
-            getline(cin,read_line);
+            getline(cin, read_line);
         }
 
-        if(read_line=="A") oc = t_abort;
-        else oc = t_commit;
+        if (read_line == "A")
+            oc = t_abort;
+        else
+            oc = t_commit;
 
-        transaction t(transaction_id,operation_list,oc);
+        transaction t(transaction_id, operation_list, oc);
+        transaction_array.push_back(t);
+    }
+
+    pthread_t tid[N];
+    for (int i = 0; i < N; i++)
+    {
+        pthread_create(&tid[i], NULL, execute_transaction, (void *)(long long int)i);
+    }
+
+    for (int i = 0; i < N; i++)
+    {
+        pthread_join(tid[i], NULL);
     }
 
     return 0;
