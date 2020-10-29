@@ -45,6 +45,17 @@ class lockmanager
 
         bool Write_lock(int transaction_id,string state_variable){
             if(read_count[state_variable]!=0){
+                if(read_count[state_variable]==1 && lock_state[state_variable]==1){
+                    read_count[state_variable]--;
+                    lock_state[state_variable]=2;
+                    return true;
+                }
+                if(lock_state[state_variable]==1){
+                    read_count[state_variable]--;
+
+                    // can be a trouble
+                    lock_state[state_variable]=2;
+                }
                 state_queue_lock[state_variable].push(transaction_id);
                 return false;
             }
@@ -59,5 +70,13 @@ class lockmanager
                 }
             }
         }
-        
+
+        bool Release_Lock(int transaction_id,string state_variable){
+            if(lock_state[state_variable]==1){
+                read_count[state_variable]--;
+            }
+            lock_state[state_variable]=0;
+            return true;
+        }
+
 };
