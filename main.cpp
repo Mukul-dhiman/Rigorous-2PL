@@ -112,6 +112,10 @@ int main(int argc, char *argv[])
     pthread_t tid[N];
     for (int i = 0; i < N; i++)
     {
+        // for(auto t:transaction_array[i].list_of_operations){
+        //     cout<<t<<" | ";
+        // }
+        // cout<<endl;
         pthread_create(&tid[i], NULL, execute_transaction, (void *)(long long int)i);
     }
 

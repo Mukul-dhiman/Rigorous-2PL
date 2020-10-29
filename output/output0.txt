@@ -11,3 +11,5 @@ W u
 R v
 v = v + 50
 W v
+R u | R v | u = u + v | W u | 
+R v | v = v + 50 | W v | 

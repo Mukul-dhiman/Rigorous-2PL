@@ -18,23 +18,23 @@ class transaction{
     
     int transaction_id;
     // std::vector<operation> list_of_operations;
-    std::vector<std::string> list_of_operations;
     outcome transaction_outcome;
     public:
-    transaction(int id, std::vector<std::string> operations, outcome oc)
-    {
-        transaction_id = id;
-        list_of_operations = operations;
-        transaction_outcome = oc;
-    }
-    std::vector<std::string> get_list_of_operations(int id)
-    {
-        return list_of_operations;
-    }
-    outcome get_outcome(int id)
-    {
-        return transaction_outcome;
-    }
+        std::vector<std::string> list_of_operations;
+        transaction(int id, std::vector<std::string> operations, outcome oc)
+        {
+            transaction_id = id;
+            list_of_operations = operations;
+            transaction_outcome = oc;
+        }
+        std::vector<std::string> get_list_of_operations(int id)
+        {
+            return list_of_operations;
+        }
+        outcome get_outcome(int id)
+        {
+            return transaction_outcome;
+        }
 };
 
 
