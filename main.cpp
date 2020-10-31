@@ -95,7 +95,6 @@ void *execute_transaction(void *arg)
             if (locks.find(lock_var) == locks.end())
             {
                 L.read_lock_acquire(id, lock_var);
-                std::cout << "R" << id << "(" << lock_var << ")" << endl;
             }
             else
             {
@@ -103,7 +102,6 @@ void *execute_transaction(void *arg)
                 if (locks[lock_var] == "W")
                 {
                     L.downgrade_lock(id, lock_var);
-                    std::cout << "dG" << id << "(" << lock_var << ")" << endl;
                 }
                 // If read lock acquired.
                 else
@@ -126,7 +124,6 @@ void *execute_transaction(void *arg)
             if (locks.find(lock_var) == locks.end())
             {
                 L.write_lock_acquire(id, lock_var);
-                std::cout << "W" << id << "(" << lock_var << ")" << endl;
             }
             else
             {
@@ -134,7 +131,6 @@ void *execute_transaction(void *arg)
                 if (locks[lock_var] == "R")
                 {
                     L.upgrade_lock(id, lock_var);
-                    std::cout << "uG" << id << "(" << lock_var << ")" << endl;
                 }
                 // If write lock acquired.
                 else
@@ -159,12 +155,10 @@ void *execute_transaction(void *arg)
     {
         if (lock.second == "R")
         {
-            std::cout << "Ru" << id << "(" << lock.first << ")" << endl;
             L.read_lock_release(id, lock.first);
         }
         else
         {
-            std::cout << "Wu" << id << "(" << lock.first << ")" << endl;
             L.write_lock_release(id, lock.first);
         }
     }

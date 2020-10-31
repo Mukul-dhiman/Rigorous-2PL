@@ -34,6 +34,7 @@ public:
         transaction_set[var_map[var_name]].insert(t_id);
         if (transaction_set[var_map[var_name]].size() == 1)
             sem_wait(&variable_write_locks[var_map[var_name]]);
+        std::cout << "R" << t_id << "(" << var_name << ")" << std::endl;
         sem_post(&lock_manager_lock);
     }
 
@@ -43,28 +44,41 @@ public:
         transaction_set[var_map[var_name]].erase(t_id);
         if (transaction_set[var_map[var_name]].size() == 0)
             sem_post(&variable_write_locks[var_map[var_name]]);
+        std::cout << "Ru" << t_id << "(" << var_name << ")" << std::endl;
         sem_post(&lock_manager_lock);
     }
 
     void write_lock_acquire(int t_id, std::string var_name)
     {
         sem_wait(&variable_write_locks[var_map[var_name]]);
+        std::cout << "W" << t_id << "(" << var_name << ")" << std::endl;
     }
 
     void write_lock_release(int t_id, std::string var_name)
     {
         sem_post(&variable_write_locks[var_map[var_name]]);
+        std::cout << "Wu" << t_id << "(" << var_name << ")" << std::endl;
     }
 
     void upgrade_lock(int t_id, std::string var_name)
     {
-        read_lock_release(t_id,var_name);
-        write_lock_acquire(t_id,var_name);
+        sem_wait(&lock_manager_lock);
+        transaction_set[var_map[var_name]].erase(t_id);
+        if (transaction_set[var_map[var_name]].size() == 0)
+            sem_post(&variable_write_locks[var_map[var_name]]);
+        sem_post(&lock_manager_lock);
+        sem_wait(&variable_write_locks[var_map[var_name]]);
+        std::cout << "UG" << t_id << "(" << var_name << ")" << std::endl;
     }
 
     void downgrade_lock(int t_id, std::string var_name)
     {
-        write_lock_release(t_id,var_name);
-        read_lock_acquire(t_id,var_name);
+        sem_post(&variable_write_locks[var_map[var_name]]);
+        sem_wait(&lock_manager_lock);
+        transaction_set[var_map[var_name]].insert(t_id);
+        if (transaction_set[var_map[var_name]].size() == 1)
+            sem_wait(&variable_write_locks[var_map[var_name]]);
+        std::cout << "DG" << t_id << "(" << var_name << ")" << std::endl;
+        sem_post(&lock_manager_lock);
     }
 };
