@@ -1,0 +1,27 @@
+5
+x 10 y 20 z 30 w 40
+1
+R x
+R y
+R z
+R w
+2
+R w
+R x
+R y
+R z
+3
+R z
+R w
+R x
+R y
+4
+R y
+R z
+R w
+R x
+5
+R y
+R z
+R x
+R w

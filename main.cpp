@@ -86,6 +86,13 @@ void *execute_transaction(void *arg)
     {
         tokens = split_string(ops[i]);
 
+        string s=to_string(id);
+        for(auto x:tokens){
+            s+=' ';
+            s+=x;
+        }
+        cout<<s<<endl;
+        
         // If read operation
         if (tokens[0] == "R")
         {
@@ -194,6 +201,11 @@ int main(int argc, char *argv[])
         state_variables[state_variable_line[i]] = stoi(state_variable_line[i + 1]);
     }
 
+    for(auto var: state_variables)
+    {
+        cout<<var.first<<": "<<var.second<<endl;
+    }
+    
     L = lockmanager(state_variable_list);
 
     // Transactions
