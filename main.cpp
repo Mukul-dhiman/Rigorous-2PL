@@ -4,6 +4,8 @@
 #include "headers/lockmanager.h"
 using namespace std;
 
+
+map<string, int> state_variables_list_Initial;
 map<string, int> state_variables;
 vector<string> state_variable_list;
 lockmanager L;
@@ -15,7 +17,7 @@ int get_value(string variable_name)
     return state_variables[variable_name];
 }
 
-// W(X)
+// W(.X)
 void set_value(string variable_name, int value)
 {
     state_variables[variable_name] = value;
@@ -86,6 +88,13 @@ void *execute_transaction(void *arg)
     {
         tokens = split_string(ops[i]);
 
+        string s=to_string(id);
+        for(auto x:tokens){
+            s+=' ';
+            s+=x;
+        }
+        cout<<s<<endl;
+        
         // If read operation
         if (tokens[0] == "R")
         {
@@ -194,6 +203,14 @@ int main(int argc, char *argv[])
         state_variables[state_variable_line[i]] = stoi(state_variable_line[i + 1]);
     }
 
+    for(auto var: state_variables)
+    {
+        cout<<var.first<<": "<<var.second<<endl;
+    
+    }
+    
+    state_variables_list_Initial = state_variables;
+
     L = lockmanager(state_variable_list);
 
     // Transactions
@@ -235,7 +252,7 @@ int main(int argc, char *argv[])
 
     for(auto var: state_variables)
     {
-        cout<<var.first<<": "<<var.second<<endl;
+        cout<<var.first<<": "<<state_variables_list_Initial[var.first]<<" -> "<<var.second<<endl;
     }
     
     return 0;
