@@ -11,7 +11,7 @@ R w
 R x
 R y
 x = y + w
-W y
+W x
 C
 3
 R z

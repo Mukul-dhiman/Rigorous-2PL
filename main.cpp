@@ -4,7 +4,7 @@
 #include "headers/lockmanager.h"
 using namespace std;
 
-
+string inputfile, outputfile;
 map<string, int> state_variables_list_Initial;
 map<string, int> state_variables;
 vector<string> state_variable_list;
@@ -17,7 +17,7 @@ int get_value(string variable_name)
     return state_variables[variable_name];
 }
 
-// W(.X)
+// W(X)
 void set_value(string variable_name, int value)
 {
     state_variables[variable_name] = value;
@@ -87,13 +87,6 @@ void *execute_transaction(void *arg)
     for (int i = 0; i < ops.size(); i++)
     {
         tokens = split_string(ops[i]);
-
-        string s=to_string(id);
-        for(auto x:tokens){
-            s+=' ';
-            s+=x;
-        }
-        cout<<s<<endl;
         
         // If read operation
         if (tokens[0] == "R")
@@ -185,8 +178,10 @@ int main(int argc, char *argv[])
     }
 
     // Redirect I/O to files provided as argument
-    ifstream cin(argv[1]);
-    // ofstream cout(argv[2]);
+    inputfile = argv[1];
+    ifstream cin(inputfile);
+    outputfile = argv[2];
+    ofstream cout(outputfile);
 
     // Number of transactions
     string read_line;
@@ -203,11 +198,10 @@ int main(int argc, char *argv[])
         state_variables[state_variable_line[i]] = stoi(state_variable_line[i + 1]);
     }
 
-    for(auto var: state_variables)
-    {
-        cout<<var.first<<": "<<var.second<<endl;
-    
-    }
+    // for(auto var: state_variables)
+    // {
+    //     cout<<var.first<<": "<<var.second<<endl;
+    // }
     
     state_variables_list_Initial = state_variables;
 
@@ -252,7 +246,14 @@ int main(int argc, char *argv[])
 
     for(auto var: state_variables)
     {
-        cout<<var.first<<": "<<state_variables_list_Initial[var.first]<<" -> "<<var.second<<endl;
+        cout<<var.first<<": "<<var.second<<" ";
+    }
+    cout<<endl;
+
+    vector<string> logs = L.get_logs();
+    for(auto log: logs)
+    {
+        cout<<log<<endl;
     }
     
     return 0;
