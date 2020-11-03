@@ -14,5 +14,5 @@ for i in "${array[@]}"
 do
     j=`perl -pe "s/${prefix}((?:(?!(${suffix})).)*)${suffix}/\1/" <<< $i`
 	./main input/$i output/out$j
-    
 done
+echo see output/ folder to see outputs
