@@ -255,6 +255,8 @@ int main(int argc, char *argv[])
     {
         cout<<log<<endl;
     }
+
+    cout<<"Successfully executed all the transactions."<<endl;
     
     return 0;
 }
