@@ -1,6 +1,6 @@
-u: 20 v: 60 x: 100 
-R-lock[2,v]
+u: 20 v: 60 
 R-lock[1,u]
+R-lock[2,v]
 R-lock[1,v]
 wait_upgrade[2,v]
 upgrade[1,u]
